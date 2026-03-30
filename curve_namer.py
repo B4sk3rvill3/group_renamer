@@ -19,8 +19,8 @@ def get_used_object_names(exclude_objects):
     return {obj.name for obj in bpy.data.objects if obj not in exclude_set}
 
 def get_used_curve_data_names(exclude_objects):
-    exclude_data = {obj.data for obj in exclude_objects if obj.type == 'CURVE'}
-    return {obj.data.name for obj in bpy.data.objects if obj.type == 'CURVE' and obj.data not in exclude_data}
+    exclude_data = {obj.data for obj in exclude_objects if obj.type == 'CURVE' and obj.data is not None}
+    return {obj.data.name for obj in bpy.data.objects if obj.type == 'CURVE' and obj.data is not None and obj.data not in exclude_data}
 
 # --- Operator
 class OBJECT_OT_rename_curves(Operator):
@@ -29,7 +29,7 @@ class OBJECT_OT_rename_curves(Operator):
     bl_description = "Rename selected curves based on the selected sub-group name"
 
     def execute(self, context):
-        selected = [obj for obj in context.selected_objects if obj.type == 'CURVE']
+        selected = [obj for obj in (context.selected_objects or []) if obj.type == 'CURVE']
 
         if not selected:
             self.report({'WARNING'}, "No curves selected!")
@@ -55,6 +55,10 @@ class OBJECT_OT_rename_curves(Operator):
                 self.report({'WARNING'}, f"Name '{new_name}' already exists. Skipping '{obj.name}'.")
                 continue
 
+            if obj.data is None:
+                self.report({'ERROR'}, "Object has no data block.")
+                return {'CANCELLED'}
+
             obj.name = new_name
             obj.data.name = new_name
 
@@ -74,6 +78,8 @@ class VIEW3D_PT_curve_renamer(Panel):
 
     def draw(self, context):
         layout = self.layout
+        if not layout:
+            return
         layout.label(text="Curve Renamer")
         layout.operator("object.rename_curves", icon='OUTLINER_OB_CURVE')
 

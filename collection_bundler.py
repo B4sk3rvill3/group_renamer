@@ -34,7 +34,7 @@ def safe_link_to_collection(obj, target_col):
 
 
 def bundle_selected_objects():
-    selected_objs = [obj for obj in bpy.context.selected_objects if obj.type in {'MESH', 'CURVE'}]
+    selected_objs = [obj for obj in (bpy.context.selected_objects or []) if obj.type in {'MESH', 'CURVE'}]
 
     if not selected_objs:
         raise RuntimeError("No supported objects selected.")
@@ -108,6 +108,8 @@ class VIEW3D_PT_bundle_panel(Panel):
 
     def draw(self, context):
         layout = self.layout
+        if not layout:
+            return
         layout.operator("object.bundle_selected", icon="PACKAGE")
 
 

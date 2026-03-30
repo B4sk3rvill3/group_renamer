@@ -9,15 +9,16 @@ import json
 import importlib
 
 # Your repo information here
-GITHUB_API_RELEASES = "https://api.github.com/repos/Luka4D/group_renamer/releases/latest"
-DOWNLOAD_URL_TEMPLATE = "https://github.com/Luka4D/group_renamer/archive/refs/tags/v{tag_name}.zip"
+GITHUB_API_RELEASES = "https://api.github.com/repos/B4sk3rvill3/group_renamer/releases/latest"
+DOWNLOAD_URL_TEMPLATE = "https://github.com/B4sk3rvill3/group_renamer/archive/refs/tags/v{tag_name}.zip"
 
 def get_bl_info():
     """
     Dynamically load the bl_info dictionary from __init__.py
     to avoid a circular import.
     """
-    module = importlib.import_module(__package__)
+    package = __package__ or __name__
+    module = importlib.import_module(package)
     return module.bl_info
 
 
@@ -73,7 +74,7 @@ def download_and_install_update(tag_name):
 
 
 class GroupRenamerPreferences(AddonPreferences):
-    bl_idname = __package__
+    bl_idname = __package__ or ""
 
     update_available: BoolProperty(default=False)
     latest_version: StringProperty(default="")

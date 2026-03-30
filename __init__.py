@@ -1,14 +1,15 @@
 from . import group_data
 from . import custom_renamer
 from . import group_pie_menu
-from . import addon_updater
 from . import curve_namer
+from . import collection_bundler
+from . import addon_updater
 
 bl_info = {
     "name": "Group Renamer",
-    "author": "Luka4D",
-    "version": (1, 3, 0),
-    "blender": (4, 2),
+    "author": "B4sk3rvill3",
+    "version": (1, 4, 0),
+    "blender": (5, 1),
     "location": "View3D > Sidebar > Namer Tab",
     "description": "Rename objects based on group and sub-group, with pie menu support",
     "category": "Object",

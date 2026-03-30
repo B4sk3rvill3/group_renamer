@@ -61,6 +61,8 @@ class OBJECT_OT_rename_to_subgroup(Operator):
     def execute(self, context):
         props = context.scene.rename_props
         obj = context.active_object
+        assert obj is not None
+        assert isinstance(obj.data, bpy.types.Mesh)
         mesh = obj.data
 
         new_name = props.sub_group.strip()
@@ -86,7 +88,7 @@ class OBJECT_OT_rename_to_subgroup(Operator):
             material_name = new_name.lower()
 
             mat = link_material(material_name, blend_path)
-            if mat:
+            if mat and isinstance(mat, bpy.types.Material):
                 # Clear existing materials and assign new one
                 obj.data.materials.clear()
                 obj.data.materials.append(mat)
@@ -133,10 +135,10 @@ classes = (
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
-    bpy.types.Scene.rename_props = PointerProperty(type=RenameProps)
+    bpy.types.Scene.rename_props = PointerProperty(type=RenameProps) # type: ignore
     # ❌ No more direct scene access!
 
 def unregister():
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
-    del bpy.types.Scene.rename_props
+    del bpy.types.Scene.rename_props # type: ignore
