@@ -24,6 +24,7 @@ class OBJECT_OT_rename_to_subgroup_pie(Operator):
             return {'CANCELLED'}
 
         mesh = obj.data
+        assert isinstance(mesh, bpy.types.Mesh)
 
         bm = bmesh.new()
         bm.from_mesh(mesh)
