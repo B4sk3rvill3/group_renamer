@@ -52,6 +52,7 @@ def make_dropdown_menu(group, items):
     return SubMenu
 
 # --- Main Pie Menu
+# TODO: Revise pie menu UI style
 class PIE_MT_group_menu(Menu):
     bl_label = "Group Pie Menu"
     bl_idname = "PIE_MT_group_menu"
